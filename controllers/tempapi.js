@@ -1,4 +1,4 @@
-var mysql = require("./project_modules/mysqlaccess.js");
+var mysql = require("../project_modules/mysqlaccess.js");
 connection = mysql.getConnection();
 
 module.exports.set = function(app){
