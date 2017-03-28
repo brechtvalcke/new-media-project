@@ -1,23 +1,16 @@
 var express = require("express");
 var app = express();
-var mysql = require('mysql');
+
 var fs = require('fs');
 var path = require("path");
 var bodyParser = require('body-parser')
 
+var mysql = require(__dirname + "/mysqlaccess.js")
+
+connection = mysql.getConnection();
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'usbw',
-  port: 3307,
-  database : 'sodaqmbili'
-});
-
-// http://codetheory.in/fixing-node-mysql-error-cannot-enqueue-handshake-after-invoking-quit/
-connection.connect();
 
 /*  @api lightsensor
 *   @var int          | light_s_id    [record id]
@@ -56,7 +49,7 @@ app.post('/api/lightsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the lightsensor table.');
     }
   });
@@ -99,7 +92,7 @@ app.post('/api/airsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the airsensor table.');
     }
   });
@@ -141,7 +134,7 @@ app.post('/api/loudsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the loudsensor table.');
     }
   });
@@ -183,7 +176,7 @@ app.post('/api/tempsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the tempsensor table.');
     }
   });
@@ -225,7 +218,7 @@ app.post('/api/pressuresensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the pressuresensor table.');
     }
   });
@@ -267,7 +260,7 @@ app.post('/api/humiditysensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the humiditysensor table.');
     }
   });
