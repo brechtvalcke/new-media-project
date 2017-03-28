@@ -1,3 +1,6 @@
+var mysql = require("./project_modules/mysqlaccess.js");
+connection = mysql.getConnection();
+
 module.exports.set = function(app){
     /*  @api pressuresensor
 *   @var int          | pressure_s_id     [record id]

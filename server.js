@@ -3,11 +3,11 @@ var app = express();
 
 var fs = require('fs');
 var path = require("path");
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
-var mysql = require(__dirname + "/project_modules/mysqlaccess.js")
-var controllers = require('./controllers')
+var controllers = require('./controllers');
 
+var mysql = require("./project_modules/mysqlaccess.js");
 connection = mysql.getConnection();
 
 app.use(bodyParser.urlencoded({extended:true}));
