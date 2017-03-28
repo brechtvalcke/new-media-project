@@ -1,10 +1,11 @@
 var express = require("express");
 var app = express();
-var mysql = require('mysql');
+
 var fs = require('fs');
 var path = require("path");
 var bodyParser = require('body-parser');
 
+<<<<<<< HEAD
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
@@ -119,20 +120,14 @@ app.get('/api/loudsensor', function(req, res) {
     }
   });
 });
+=======
+var mysql = require(__dirname + "/project_modules/mysqlaccess.js")
+var controllers = require('./controllers')
+>>>>>>> 7b553ae1651f33556f89db871189c8700dedabe2
 
-app.get('/api/loudsensor/:date/:date2', function(req, res) {
-  var date = req.params.date;
-  var date2 = req.params.date2;
-  connection.query('SELECT * FROM loudsensor WHERE loud_s_date BETWEEN "'+date+'" AND "'+date2+'"', function(err, rows, fields) {
-    if (!err){
-        res.json(rows);
-    }
-    else {
-      res.json('Failed to fetch rows from the loudsensor table.');
-    }
-  });
-});
+connection = mysql.getConnection();
 
+<<<<<<< HEAD
 app.post('/api/loudsensor', function (req, res) {
   var date = req.body.date;
   var value = req.body.value;
@@ -271,10 +266,11 @@ app.post('/api/humiditysensor', function (req, res) {
     }
   });
 });
+=======
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+>>>>>>> 7b553ae1651f33556f89db871189c8700dedabe2
 
-// Default route. Code stops executing after this.
-app.get('*',function (req, res){
-  res.end("Invalid API request.");
-});
+controllers.set(app);
 
 app.listen(3000);
