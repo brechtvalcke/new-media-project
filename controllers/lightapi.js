@@ -1,7 +1,6 @@
-var mysql = require("../project_modules/mysqlaccess.js");
-connection = mysql.getConnection();
 
-module.exports.set = function(app){
+
+module.exports.set = function(app,connection){
     /*  @api lightsensor
     *   @var int          | light_s_id    [record id]
     *   @var date         | light_s_date  [current date]

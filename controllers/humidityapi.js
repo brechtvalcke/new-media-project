@@ -1,7 +1,6 @@
-var mysql = require("../project_modules/mysqlaccess.js");
-connection = mysql.getConnection();
 
-module.exports.set = function(app){
+
+module.exports.set = function(app,connection){
     /*  @api humiditysensor
 *   @var int          | humidity_s_id     [record id]
 *   @var date         | humidity_s_date   [current date]

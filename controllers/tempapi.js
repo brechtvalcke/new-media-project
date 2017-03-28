@@ -1,7 +1,6 @@
-var mysql = require("../project_modules/mysqlaccess.js");
-connection = mysql.getConnection();
 
-module.exports.set = function(app){
+
+module.exports.set = function(app,connection){
     /*  @api tempsensor
 *   @var int          | temp_s_id     [record id]
 *   @var date         | temp_s_date   [current date]
