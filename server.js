@@ -3,7 +3,7 @@ var app = express();
 var mysql = require('mysql');
 var fs = require('fs');
 var path = require("path");
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -11,8 +11,7 @@ app.use(bodyParser.json());
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : 'usbw',
-  port: 3307,
+  password : 'Ib123456',
   database : 'sodaqmbili'
 });
 
@@ -56,7 +55,7 @@ app.post('/api/lightsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the lightsensor table.');
     }
   });
@@ -99,7 +98,7 @@ app.post('/api/airsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the airsensor table.');
     }
   });
@@ -141,7 +140,7 @@ app.post('/api/loudsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the loudsensor table.');
     }
   });
@@ -183,7 +182,7 @@ app.post('/api/tempsensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the tempsensor table.');
     }
   });
@@ -225,7 +224,7 @@ app.post('/api/pressuresensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the pressuresensor table.');
     }
   });
@@ -255,7 +254,7 @@ app.get('/api/humiditysensor/:date/:date2', function(req, res) {
         res.json(rows);
     }
     else {
-      res.json('Failed to fetch rows from the humiditysensor table.');
+      res.json({error: "Failed to fetch rows from the humiditysensor table."});
     }
   });
 });
@@ -267,7 +266,7 @@ app.post('/api/humiditysensor', function (req, res) {
     if (!err){
         res.json("OK");
     }
-    else {;
+    else {
       res.json('Failed to insert rows into the humiditysensor table.');
     }
   });
