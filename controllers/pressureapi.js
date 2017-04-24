@@ -42,4 +42,4 @@ app.post('/api/pressuresensor', function (req, res) {
     }
   });
 });
-};
+}

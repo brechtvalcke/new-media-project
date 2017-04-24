@@ -47,4 +47,4 @@ app.post('/api/humiditysensor', function (req, res) {
 app.get('*',function (req, res){
   res.end("Invalid API request.");
 });
-};
+}
