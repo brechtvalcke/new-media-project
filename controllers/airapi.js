@@ -42,4 +42,4 @@ app.post('/api/airsensor', function (req, res) {
     }
   });
 });
-}
+};

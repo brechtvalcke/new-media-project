@@ -42,4 +42,4 @@ app.post('/api/tempsensor', function (req, res) {
     }
   });
 });
-}
+};

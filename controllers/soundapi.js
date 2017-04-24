@@ -42,4 +42,4 @@ app.post('/api/loudsensor', function (req, res) {
     }
   });
 });
-}
+};
