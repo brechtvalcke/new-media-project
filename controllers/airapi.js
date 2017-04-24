@@ -14,7 +14,6 @@ app.get('/api/airsensor', function(req, res) {
       res.json('Failed to fetch rows from the airsensor table.');
     }
   });
-  connection.end();
 });
 
 app.get('/api/airsensor/:date/:date2', function(req, res) {

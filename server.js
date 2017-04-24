@@ -10,8 +10,9 @@ var controllers = require('./controllers');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-
 controllers.set(app);
+
+
 
 app.use(express.static('public'));
 
