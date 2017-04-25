@@ -1,5 +1,7 @@
 var express = require("express");
 var app = express();
+var server = require("http").createServer(app);
+var io = require("socket.io")(server);
 
 var fs = require('fs');
 var path = require("path");
@@ -10,7 +12,7 @@ var controllers = require('./controllers');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-controllers.set(app);
+controllers.set(app,io);
 
 
 
