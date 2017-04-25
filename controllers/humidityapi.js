@@ -44,7 +44,5 @@ app.post('/api/humiditysensor', function (req, res) {
 });
 
 // Default route. Code stops executing after this.
-app.get('*',function (req, res){
-  res.end("Invalid API request.");
-});
+
 }

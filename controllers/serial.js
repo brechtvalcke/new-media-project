@@ -1,36 +1,47 @@
-module.exports.set = function(app,conn){
-  var SerialPort = require('serialport');
+module.exports.set = function(app, conn) {
 
-  var parsers = SerialPort.parsers;
+    var SerialPort = require('serialport');
 
-  var port = new SerialPort('/dev/ttyUSB0', {
-    baudrate: 9600,
-    parser: parsers.readline('\r\n')
-  });
+    var parsers = SerialPort.parsers;
 
-  port.on('open', function() {
-    console.log('Port open');
-  });
+    var port = new SerialPort('/dev/ttyUSB0', {
+        baudrate: 9600,
+        parser: parsers.readline('\r\n')
+    });
 
-  port.on('data', function(data) {
+    port.on('open', function() {
+        console.log('Port open');
+        setTimeout(function(){
+          port.write("SYST:ADDR?\n", function(err, results) {
+              console.log("err: " + err);
+              console.log("results: " + results);
+            });
+         }, 3000);
 
-    data=data.substr(0,data.length -1);
-    var parts = data.split(":");
-    switch(parts[0]){
-      case "licht":
+    });
 
-      break;
-      case "lucht":
-      conn.query('INSERT INTO airsensor (air_s_date,air_s_value) VALUES ("'+Date.now()+'","'+parts[1]+'")', function(err, rows, fields) {
-        if (!err){
-          console.log("added lucht");
+    port.on('data', function(data) {
+      var b = new Buffer('a');
+      port.write(b);
+        data = data.substr(0, data.length - 1);
+        var parts = data.split(":");
+        switch (parts[0]) {
+            case "light":
+                //console.log("light:" + parts[1]);
+                break;
+            case "button":
+                if (parts[1] === "0") {
+                    //console.log("button off");
+                } else {
+                    //console.log("button on");
+
+                }
+                break;
+            case "cData:":
+                console.log(parts[1]);
+                break;
         }
-        else {
-        }
-      });
-      break;
 
-    }
+    });
 
-  });
 };
