@@ -14,7 +14,12 @@ app.use(bodyParser.json());
 
 controllers.set(app,io);
 
+io.on("connection", function(client) {
+    client.emit('connected', {
+        connected: true,
+    });
 
+});
 
 app.use(express.static('public'));
 

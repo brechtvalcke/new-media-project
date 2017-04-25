@@ -12,17 +12,14 @@ module.exports.set = function(app, conn) {
     port.on('open', function() {
         console.log('Port open');
         setTimeout(function(){
-          port.write("SYST:ADDR?\n", function(err, results) {
-              console.log("err: " + err);
-              console.log("results: " + results);
+          port.write("12", function(err, results) {
+
             });
          }, 3000);
 
     });
 
     port.on('data', function(data) {
-      var b = new Buffer('a');
-      port.write(b);
         data = data.substr(0, data.length - 1);
         var parts = data.split(":");
         switch (parts[0]) {
@@ -37,9 +34,12 @@ module.exports.set = function(app, conn) {
 
                 }
                 break;
-            case "cData:":
+            case "cData":
+            console.log("res recieved");
                 console.log(parts[1]);
                 break;
+                default:
+
         }
 
     });
