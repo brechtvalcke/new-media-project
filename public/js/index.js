@@ -1,8 +1,12 @@
+var socket = io.connect('http://localhost');
 $(document).ready(function(){
     init();
 });
 
 function init(){
+  socket.on("connected",function(data){
+      console.log("connected");
+  });
     $("#newAlarm").click(function(){
         console.log("new alarm");
         var time = prompt("please enter your time", "12:00");
@@ -51,4 +55,3 @@ function setNewAlarm(hr, min){
 function removeAlarm(){
     //socked data to remove alarm
 }
-
