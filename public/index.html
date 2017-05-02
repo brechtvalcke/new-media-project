@@ -1,11 +1,89 @@
 <html>
 <head>
-
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="js/index.js"></script>
 </head>
 <body>
-  jeeej website werkt
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-    <script src="test.js"></script>
-
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="index.html">Sensor</a>
+      </div>
+    </div>
+  </nav>
+  <div id="alarmDiv" class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Alarm</th>
+              <th>Time</th>
+              <th>Repeating</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody id="alarms">
+            <tr>
+              <td>Alarm</td>
+              <td id="alarm1">09:45</td>
+              <td>True</td>
+              <td><button class="btn btn-danger">Delete</button></td>
+            </tr>
+            <tr>
+              <td>Alarm</td>
+              <td id="alarm2">15:00</td>
+              <td>False</td>
+              <td><button class="btn btn-danger">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="newAlarm" class="btn btn-primary">New Alarm</button>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Door sensor</td>
+              <td id="doorStatus">InActive</td>
+            </tr>
+            <tr>
+              <td>Alarm</td>
+              <td id="alarmValue">InActive</td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="activateAlarm" class="btn btn-primary">Activate Alarm</button>
+      </div>
+    </div>
+  </div>
+  <div id="lightDiv" class="container">
+    <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Motion sensor</td>
+              <td id="motionValue">0</td>
+            </tr>
+            <tr>
+              <td>Light status</td>
+              <td id="lightValue">InActive</td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="lightSwitch" class="btn btn-primary">Light switch</button>
+  </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
 </body>
 </html>
