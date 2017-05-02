@@ -5,3 +5,8 @@
 .btn-primary{
     margin-bottom: 25px;
 }
+
+#alarmDiv{
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+}

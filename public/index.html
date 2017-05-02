@@ -13,7 +13,7 @@
       </div>
     </div>
   </nav>
-  <div class="container">
+  <div id="alarmDiv" class="container">
     <div class="row">
       <div class="col-lg-12">
         <table class="table table-bordered">
@@ -51,7 +51,7 @@
           <tbody>
             <tr>
               <td>Door sensor</td>
-              <td id="doorValue">InActive</td>
+              <td id="doorStatus">InActive</td>
             </tr>
             <tr>
               <td>Alarm</td>
@@ -62,6 +62,27 @@
         <button id="activateAlarm" class="btn btn-primary">Activate Alarm</button>
       </div>
     </div>
+  </div>
+  <div id="lightDiv" class="container">
+    <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Motion sensor</td>
+              <td id="motionValue">0</td>
+            </tr>
+            <tr>
+              <td>Light status</td>
+              <td id="lightValue">InActive</td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="lightSwitch" class="btn btn-primary">Light switch</button>
   </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
 </body>
