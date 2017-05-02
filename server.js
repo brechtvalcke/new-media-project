@@ -12,13 +12,12 @@ var controllers = require('./controllers');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-controllers.set(app,io);
+controllers.set(app,io,fs);
 
 io.on("connection", function(client) {
     client.emit('connected', {
         connected: true,
     });
-
 });
 
 app.use(express.static('public'));
