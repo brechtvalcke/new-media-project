@@ -1,5 +1,5 @@
-module.exports.set = function(app, io, fs) {
-// {"timestamp":{"hour":11,"min":12}}
+module.exports.set = function(app, fs) {
+    // {"timestamp":{"hour":11,"min":12}}
     var SerialPort = require('serialport');
 
     var parsers = SerialPort.parsers;
@@ -43,15 +43,28 @@ module.exports.set = function(app, io, fs) {
     });
 
     function fileRead(data, doorOpened) {
-        var settings = JSON.parse(data);
-
-        settings.sensors.forEach(function(sensor) {
-            if (sensor.name === "door") {
-                sensor.opened = doorOpened;
+        var errorOnRead = false;
+        var settings;
+        try {
+            settings = JSON.parse(data);
+        } catch (e) {
+            try {
+                settings = JSON.parse(data);
+            } catch (e) {
+                console.log("app crashed because of settings file reading. Ignoring read");
+                errorOnRead=true;
             }
-        });
-        settings = checkIfAlarm(settings, doorOpened);
-        fs.writeFile('./settings/settings.json', JSON.stringify(settings));
+        }
+        if (!errorOnRead) {
+            settings.sensors.forEach(function(sensor) {
+                if (sensor.name === "door") {
+                    sensor.opened = doorOpened;
+                }
+            });
+            settings = checkIfAlarm(settings, doorOpened);
+            fs.writeFile('./settings/settings.json', JSON.stringify(settings));
+        }
+
     }
 
     function checkIfAlarm(settings, doorOpened) {
@@ -72,7 +85,6 @@ module.exports.set = function(app, io, fs) {
                 var tempAlarms = [];
 
                 settings.alarms.forEach(function(alarm) {
-                  console.log(lastAlarm.timestamp.min == alarm.timestamp.min & lastAlarm.timestamp.hour == alarm.timestamp.hour);
                     if (lastAlarm.timestamp.min == alarm.timestamp.min & lastAlarm.timestamp.hour == alarm.timestamp.hour) {
 
                     } else {

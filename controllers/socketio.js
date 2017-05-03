@@ -1,4 +1,4 @@
-module.exports.set = function(app,io){
+module.exports.set = function(app){
 
 
 };

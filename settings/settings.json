@@ -1,1 +1,1 @@
-{"enabled":true,"alarms":[{"timestamp":{"hour":11,"min":12}}],"sensors":[{"name":"door","opened":false}],"alarmActive":false}
+{"enabled":true,"alarms":[{"timestamp":{"hour":16,"min":10}}],"sensors":[{"name":"door","opened":false}],"alarmActive":false}
