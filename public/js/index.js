@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost');
+var socket = io.connect('http://78.22.152.68/');
 socket.on('connected', function(data) {
     socket.emit("init");
 
@@ -86,10 +86,10 @@ function setNewAlarm(hr, min) {
 socket.on("door", function(data) {
     switch (data) {
 
-        case "0":
+        case "1023":
             document.getElementById("doorStatus").innerHTML = "closed";
             break;
-        case "1023":
+        case "0":
             document.getElementById("doorStatus").innerHTML = "opened";
             doorOpened = true;
     }

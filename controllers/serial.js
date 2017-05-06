@@ -22,10 +22,10 @@ module.exports.set = function(app, fs,emitQeue) {
                 var doorOpened = false;
                 switch (parts[1]) {
 
-                    case "0":
+                    case "1023":
                         doorOpened = false;
                         break;
-                    case "1023":
+                    case "0":
                         doorOpened = true;
                 }
                 emitQeue.push({emitString:"door",emitData:parts[1]});
