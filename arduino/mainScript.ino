@@ -50,10 +50,10 @@ void checkData(int data){
     isActive = false;
   }
   if(data == 3){
-      ledActive = true;
+      setLed2(HIGH);
   }
   if(data == 4){
-      ledActive = false;
+      setLed2(LOW);
   }
 }
 
@@ -67,5 +67,8 @@ void soundAlarm(){
 
 void setLed(int ledStatus){
   digitalWrite(LED2, ledStatus);
+}
+
+void setLed2(int ledStatus){
   digitalWrite(LED1, ledStatus);
 }
