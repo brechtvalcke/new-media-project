@@ -63,7 +63,17 @@ function addAlarmToView(hr, min) {
         removeAlarm(hr, min);
     });
 }
+socket.on("motion",function(data){
+  document.getElementById("motionValue").innerHTML=data;
+});
+socket.on("light",function(status){
+  if(status){
+    document.getElementById("lightValue").innerHTML="On";
+  }else{
+    document.getElementById("lightValue").innerHTML="Off";
+  }
 
+});
 socket.on("alarmAdded", function(data) {
     addAlarmToView(data.timestamp.hour, data.timestamp.min);
 });

@@ -17,6 +17,7 @@ module.exports.set = function(app, fs,emitQeue) {
     port.on('data', function(data) {
         data = data.substr(0, data.length - 1);
         var parts = data.split(":");
+
         switch (parts[0]) {
             case "door":
                 var doorOpened = false;
@@ -37,12 +38,35 @@ module.exports.set = function(app, fs,emitQeue) {
                     fileRead(data, doorOpened);
                 });
                 break;
+                case "motion":
+                  emitQeue.push({emitString:"motion",emitData:parts[1]});
+                  checkForLight(parts[1]);
+                break;
             default:
 
         }
 
     });
+    var lightOn=false;
+function checkForLight(motion){
+  if (!lightOn){
 
+
+    if (motion>0){
+      emitQeue.push({emitString:"light",emitData:true});
+      port.write("3", function(err, results) {
+        lightOn=true;
+      });
+      setTimeout(function(){
+        port.write("4", function(err, results) {
+
+        });
+        emitQeue.push({emitString:"light",emitData:false});
+        lightOn=false;
+       }, 30000);
+    }
+  }
+}
     function fileRead(data, doorOpened) {
         var errorOnRead = false;
         var settings;
