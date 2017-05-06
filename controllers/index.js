@@ -2,7 +2,7 @@
 var serialport = require("./serial.js");
 var socketio = require("./socketio.js");
 
-module.exports.set = function(app,io,fs){
+module.exports.set = function(app,emitQeue,fs){
 
-    serialport.set(app,fs);
+    serialport.set(app,fs,emitQeue);
 };

@@ -20,7 +20,7 @@ function init() {
         }
     });
     $("#activateAlarm").click(function() {
-        console.log("activate alarm");
+        socket.emit("activateAlarm");
     });
     $("#lightSwitch").click(function() {
         console.log("switch light");
@@ -55,13 +55,26 @@ function setDoorStatus(value) {
     $("#doorStatus").html(value);
 }
 
-function setNewAlarm(hr, min) {
+function addAlarmToView(hr, min) {
     var id = Math.floor((Math.random() * 10000) + 1);
-    $("#alarms").append("<tr id='row" + id + "'><td>Alarm</td><td id='alarm" + id + "'>" + hr + ":" + min + "</td><td>True</td><td><button id='btn" + id + "' class='btn btn-danger'>Delete</button></td></tr>");
+    $("#alarms").append("<tr id='row" + id + "'><td id='alarm" + id + "'>" + hr + ":" + min + "</td><td><button id='btn" + id + "' class='btn btn-danger'>Delete</button></td></tr>");
     $("#btn" + id).click(function() {
         $("#row" + id).remove();
         removeAlarm(hr, min);
     });
+}
+
+socket.on("alarmAdded", function(data) {
+    addAlarmToView(data.timestamp.hour, data.timestamp.min);
+});
+
+function removeWithId(id) {
+    var elem = document.getElementById(id);
+    return elem.parentNode.removeChild(elem);
+}
+
+function setNewAlarm(hr, min) {
+    addAlarmToView(hr, min);
     socket.emit("addAlarm", {
         timestamp: {
             hour: hr,
@@ -70,6 +83,38 @@ function setNewAlarm(hr, min) {
     });
     //socked data to add alarm (hr, min)
 }
+socket.on("door", function(data) {
+    switch (data) {
+
+        case "0":
+            document.getElementById("doorStatus").innerHTML = "closed";
+            break;
+        case "1023":
+            document.getElementById("doorStatus").innerHTML = "opened";
+            doorOpened = true;
+    }
+});
+socket.on("alarm", function(alarmstatus) {
+  console.log("alarm",alarmstatus);
+    if (alarmstatus) {
+        document.getElementById("alarmValue").innerHTML = "on";
+    } else {
+        document.getElementById("alarmValue").innerHTML = "off";
+    }
+});
+socket.on("externalRemoveAlarm", function(data) {
+  console.log(data);
+    var alarms = document.querySelectorAll("#alarms tr");
+    alarms.forEach(function(alarm) {
+        var idnumber = alarm.id.substring(3, alarm.id.length);
+        var time = document.getElementById("alarm" + idnumber);
+        if (time.innerHTML == data.timestamp.hour + ":" + data.timestamp.min) {
+            removeWithId(alarm.id);
+        }
+
+    });
+
+});
 
 function removeAlarm(hr, min) {
     //socked data to remove alarm

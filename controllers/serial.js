@@ -1,4 +1,4 @@
-module.exports.set = function(app, fs) {
+module.exports.set = function(app, fs,emitQeue) {
     // {"timestamp":{"hour":11,"min":12}}
     var SerialPort = require('serialport');
 
@@ -28,6 +28,7 @@ module.exports.set = function(app, fs) {
                     case "1023":
                         doorOpened = true;
                 }
+                emitQeue.push({emitString:"door",emitData:parts[1]});
 
                 fs.readFile('./settings/settings.json', function read(err, data) {
                     if (err) {
@@ -56,13 +57,9 @@ module.exports.set = function(app, fs) {
             }
         }
         if (!errorOnRead) {
-            settings.sensors.forEach(function(sensor) {
-                if (sensor.name === "door") {
-                    sensor.opened = doorOpened;
-                }
-            });
+
             settings = checkIfAlarm(settings, doorOpened);
-            fs.writeFile('./settings/settings.json', JSON.stringify(settings));
+            fs.writeFile('./settings/settings.json', JSON.stringify(settings),function(err){});
         }
 
     }
@@ -81,18 +78,21 @@ module.exports.set = function(app, fs) {
         } else {
             if (doorOpened) {
                 enableDisableAlarm(false);
+
                 settings.alarmActive = false;
                 var tempAlarms = [];
 
                 settings.alarms.forEach(function(alarm) {
                     if (lastAlarm.timestamp.min == alarm.timestamp.min & lastAlarm.timestamp.hour == alarm.timestamp.hour) {
-
+emitQeue.push({emitString:"externalRemoveAlarm",emitData:alarm});
                     } else {
                         tempAlarms.push(alarm);
                     }
                 });
                 settings.alarms = tempAlarms;
                 console.log("disabling alarm");
+            }else{
+              enableDisableAlarm(true);
             }
         }
         return settings;
@@ -118,10 +118,12 @@ module.exports.set = function(app, fs) {
             port.write("1", function(err, results) {
 
             });
+            emitQeue.push({emitString:"alarm",emitData:true});
         } else {
             port.write("2", function(err, results) {
 
             });
+            emitQeue.push({emitString:"alarm",emitData:false});
         }
 
     }
