@@ -1,4 +1,4 @@
-module.exports.set = function(app, fs,emitQeue) {
+module.exports.set = function(app, fs,emitQueue,settings) {
     // {"timestamp":{"hour":11,"min":12}}
     var SerialPort = require('serialport');
 
@@ -29,17 +29,13 @@ module.exports.set = function(app, fs,emitQeue) {
                     case "0":
                         doorOpened = true;
                 }
-                emitQeue.push({emitString:"door",emitData:parts[1]});
+                emitQueue.push({emitString:"door",emitData:parts[1]});
 
-                fs.readFile('./settings/settings.json', function read(err, data) {
-                    if (err) {
-                        throw err;
-                    }
-                    fileRead(data, doorOpened);
-                });
+
+                settings = checkIfAlarm(settings, doorOpened);
                 break;
                 case "motion":
-                  emitQeue.push({emitString:"motion",emitData:parts[1]});
+                  emitQueue.push({emitString:"motion",emitData:parts[1]});
                   checkForLight(parts[1]);
                 break;
             default:
@@ -53,7 +49,7 @@ function checkForLight(motion){
 
 
     if (motion>0){
-      emitQeue.push({emitString:"light",emitData:true});
+      emitQueue.push({emitString:"light",emitData:true});
       port.write("3", function(err, results) {
         lightOn=true;
       });
@@ -61,32 +57,13 @@ function checkForLight(motion){
         port.write("4", function(err, results) {
 
         });
-        emitQeue.push({emitString:"light",emitData:false});
+        emitQueue.push({emitString:"light",emitData:false});
         lightOn=false;
        }, 30000);
     }
   }
 }
-    function fileRead(data, doorOpened) {
-        var errorOnRead = false;
-        var settings;
-        try {
-            settings = JSON.parse(data);
-        } catch (e) {
-            try {
-                settings = JSON.parse(data);
-            } catch (e) {
-                console.log("app crashed because of settings file reading. Ignoring read");
-                errorOnRead=true;
-            }
-        }
-        if (!errorOnRead) {
 
-            settings = checkIfAlarm(settings, doorOpened);
-            fs.writeFile('./settings/settings.json', JSON.stringify(settings),function(err){});
-        }
-
-    }
     var playingSound=false;
     var intervalSoundStart;
           var exec = require('child_process').exec;
@@ -105,12 +82,13 @@ function MakeAlarmSound(enable){
         if (error) {
           return;
         }
+        exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
+        if (error) {
+          return;
+        }
       });
-      exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
-      if (error) {
-        return;
-      }
-    });
+      });
+
   }, 10000);
       playingSound=true;
     }
@@ -147,7 +125,7 @@ function MakeAlarmSound(enable){
 
                 settings.alarms.forEach(function(alarm) {
                     if (lastAlarm.timestamp.min == alarm.timestamp.min & lastAlarm.timestamp.hour == alarm.timestamp.hour) {
-emitQeue.push({emitString:"externalRemoveAlarm",emitData:alarm});
+emitQueue.push({emitString:"externalRemoveAlarm",emitData:alarm});
                     } else {
                         tempAlarms.push(alarm);
                     }
@@ -182,13 +160,13 @@ emitQeue.push({emitString:"externalRemoveAlarm",emitData:alarm});
 
             });
             MakeAlarmSound(true);
-            emitQeue.push({emitString:"alarm",emitData:true});
+            emitQueue.push({emitString:"alarm",emitData:true});
         } else {
             port.write("2", function(err, results) {
 
             });
             MakeAlarmSound(false);
-            emitQeue.push({emitString:"alarm",emitData:false});
+            emitQueue.push({emitString:"alarm",emitData:false});
         }
 
     }
