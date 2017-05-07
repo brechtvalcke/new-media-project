@@ -8,7 +8,7 @@ module.exports.set = function(app, fs,emitQeue) {
         baudrate: 9600,
         parser: parsers.readline('\r\n')
     });
-    var lastAlarm;
+    var lastAlarm={timestamp:{hour:undefined,min:undefined}};
     port.on('open', function() {
         console.log('Port open');
 
@@ -87,7 +87,46 @@ function checkForLight(motion){
         }
 
     }
+    var playingSound=false;
+    var intervalSoundStart;
+          var exec = require('child_process').exec;
+function MakeAlarmSound(enable){
+  if (enable){
+    if (!playingSound){
 
+      //taskkill /im wmplayer.exe /F
+        exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
+        if (error) {
+          return;
+        }
+      });
+      intervalSoundStart=setInterval(function() {
+        exec('taskkill /im wmplayer.exe /F', (error, stdout, stderr) => {
+        if (error) {
+          return;
+        }
+      });
+      exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
+      if (error) {
+        return;
+      }
+    });
+  }, 10000);
+      playingSound=true;
+    }
+
+  }else{
+    if(playingSound){
+      clearInterval(intervalSoundStart);
+      exec('taskkill /im wmplayer.exe /F', (error, stdout, stderr) => {
+      if (error) {
+        return;
+      }
+    });
+    playingSound=false;
+    }
+  }
+}
     function checkIfAlarm(settings, doorOpened) {
         if (!settings.alarmActive) {
             settings.alarms.forEach(function(alarm) {
@@ -142,11 +181,13 @@ emitQeue.push({emitString:"externalRemoveAlarm",emitData:alarm});
             port.write("1", function(err, results) {
 
             });
+            MakeAlarmSound(true);
             emitQeue.push({emitString:"alarm",emitData:true});
         } else {
             port.write("2", function(err, results) {
 
             });
+            MakeAlarmSound(false);
             emitQeue.push({emitString:"alarm",emitData:false});
         }
 

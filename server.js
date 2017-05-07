@@ -3,7 +3,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var fs = require('fs');
-server.listen(80);
+
 var controllers = require('./controllers');
 var emitQeue = [];
 controllers.set(app, emitQeue, fs);
@@ -138,6 +138,8 @@ io.on('connection', function(socket) {
 });
 app.use(express.static('public'));
 
+
 app.get("/", function(req, res) {
     fs.createReadStream("./public/index.html").pipe(res);
 });
+server.listen(80);

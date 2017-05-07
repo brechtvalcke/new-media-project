@@ -107,9 +107,9 @@ socket.on("door", function(data) {
 socket.on("alarm", function(alarmstatus) {
   console.log("alarm",alarmstatus);
     if (alarmstatus) {
-        document.getElementById("alarmValue").innerHTML = "on";
+        document.getElementById("alarmValue").innerHTML = "On";
     } else {
-        document.getElementById("alarmValue").innerHTML = "off";
+        document.getElementById("alarmValue").innerHTML = "Off";
     }
 });
 socket.on("externalRemoveAlarm", function(data) {
