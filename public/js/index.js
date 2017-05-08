@@ -1,14 +1,20 @@
 var socket = io.connect('http://localhost/');
 socket.on('connected', function(data) {
+  clearAllAlarms();
     socket.emit("init");
 
 });
 $(document).ready(function() {
+
     init();
 });
-
+function clearAllAlarms(){
+  var alarmsElems = document.querySelectorAll("#alarms tr");
+  alarmsElems.forEach(function(alarm){
+    removeWithId(alarm.id);
+  });
+}
 function init() {
-
     $("#newAlarm").click(function() {
         console.log("new alarm");
         var time = prompt("please enter your time", "12:00");
@@ -24,8 +30,10 @@ function init() {
     });
     $("#lightSwitch").click(function() {
         console.log("switch light");
+        socket.emit("switchLight");
     });
 }
+
 socket.on("recievedLightValue", function(value) {
     setLightValue(value);
 });
