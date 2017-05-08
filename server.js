@@ -7,6 +7,25 @@ var fs = require('fs');
 var controllers = require('./controllers');
 var emitQueue = [];
 var settings={alarms:[],alarmActive:false};
+fs.readFile('./settings/settings.json', function read(err, fileData) {
+    if (err) {
+        throw err;
+    }
+    var settingsFile;
+    var errorOnRead = false;
+
+        try {
+            settingsFile = JSON.parse(fileData);
+        } catch (e) {
+            console.log("skipping iterated task");
+            errorOnRead = true;
+        }
+    if (!errorOnRead) {
+      settings=settingsFile;
+    }
+  });
+
+
 controllers.set(app, emitQueue, fs,settings);
 
 io.on('connection', function(socket) {
@@ -56,3 +75,10 @@ app.get("/", function(req, res) {
     fs.createReadStream("./public/index.html").pipe(res);
 });
 server.listen(80);
+var ON_DEATH = require('death'); //this is intentionally ugly
+
+ON_DEATH(function(signal, err) {
+  fs.writeFile('./settings/settings.json', JSON.stringify(settings),function(err){});
+  console("saving to file and closing down");
+  process.exit();
+});
