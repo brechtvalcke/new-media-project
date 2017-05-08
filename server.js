@@ -150,7 +150,7 @@ if (enable){
 if (!playingSound){
 
   //taskkill /im wmplayer.exe /F
-    exec('start wmplayer "D:/schoolprojecten/new media project/alarm2.mp3"', (error, stdout, stderr) => {
+    exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
     if (error) {
       return;
     }
@@ -160,14 +160,14 @@ if (!playingSound){
     if (error) {
       return;
     }
-    exec('start wmplayer "D:/schoolprojecten/new media project/alarm2.mp3"', (error, stdout, stderr) => {
+    exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
     if (error) {
       return;
     }
   });
   });
 
-}, 30000);
+}, 10000);
   playingSound=true;
 }
 
