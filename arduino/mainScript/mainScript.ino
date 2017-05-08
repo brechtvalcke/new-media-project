@@ -2,7 +2,7 @@ int DOOR_PIN = A4;
 int MOTION_PIN = A0;
 
 int incomingData = -1; //serial data
-int delayTime = 50;
+int delayTime = 20;
 int timer = 0;
 
 bool ledActive = false;

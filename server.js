@@ -4,8 +4,6 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var fs = require('fs');
 
-var controllers = require('./controllers');
-var emitQueue = [];
 var settings={alarms:[],alarmActive:false};
 fs.readFile('./settings/settings.json', function read(err, fileData) {
     if (err) {
@@ -24,8 +22,6 @@ fs.readFile('./settings/settings.json', function read(err, fileData) {
       settings=settingsFile;
     }
   });
-  console.log(settings);
-controllers.set(app, emitQueue, fs,settings);
 
 io.on('connection', function(socket) {
     console.log("socket connected");
@@ -58,17 +54,7 @@ io.on('connection', function(socket) {
                 });
                 settings.alarms = tempAlarms;
     });
-    setInterval(function() {
-        emitter();
-    }, 10);
 
-    function emitter() {
-        if (emitQueue[0]) {
-            io.emit(emitQueue[0].emitString, emitQueue[0].emitData);
-            emitQueue.splice(0,1);
-
-        }
-    }
 });
 var SerialPort = require('serialport');
 
@@ -87,7 +73,6 @@ port.on('open', function() {
 port.on('data', function(data) {
     data = data.substr(0, data.length - 1);
     var parts = data.split(":");
-
     switch (parts[0]) {
         case "door":
             var doorOpened = false;
@@ -99,13 +84,13 @@ port.on('data', function(data) {
                 case "0":
                     doorOpened = true;
             }
-            emitQueue.push({emitString:"door",emitData:parts[1]});
+            io.emit("door",parts[1]);
 
 
             settings = checkIfAlarm(settings, doorOpened);
             break;
             case "motion":
-              emitQueue.push({emitString:"motion",emitData:parts[1]});
+              io.emit("motion",parts[1]);
               checkForLight(parts[1]);
             break;
         default:
@@ -119,7 +104,7 @@ if (!lightOn){
 
 
 if (motion>0){
-  emitQueue.push({emitString:"light",emitData:true});
+  io.emit("light",true);
   port.write("3", function(err, results) {
     lightOn=true;
   });
@@ -127,7 +112,7 @@ if (motion>0){
     port.write("4", function(err, results) {
 
     });
-    emitQueue.push({emitString:"light",emitData:false});
+    io.emit("light",false);
     lightOn=false;
    }, 30000);
 }
@@ -138,10 +123,10 @@ if(lightOn){
   port.write("4", function(err, results) {
 
   });
-  emitQueue.push({emitString:"light",emitData:false});
+  io.emit("light",false);
   lightOn=false;
 }else{
-  emitQueue.push({emitString:"light",emitData:true});
+  io.emit("light",true);
   port.write("3", function(err, results) {
     lightOn=true;
   });
@@ -149,7 +134,7 @@ if(lightOn){
     port.write("4", function(err, results) {
 
     });
-    emitQueue.push({emitString:"light",emitData:false});
+    io.emit("light",false);
     lightOn=false;
    }, 30000);
 }
@@ -165,7 +150,7 @@ if (enable){
 if (!playingSound){
 
   //taskkill /im wmplayer.exe /F
-    exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
+    exec('start wmplayer "D:/schoolprojecten/new media project/alarm2.mp3"', (error, stdout, stderr) => {
     if (error) {
       return;
     }
@@ -175,14 +160,14 @@ if (!playingSound){
     if (error) {
       return;
     }
-    exec('start wmplayer "D:/schoolprojecten/new media project/alarm.mp3"', (error, stdout, stderr) => {
+    exec('start wmplayer "D:/schoolprojecten/new media project/alarm2.mp3"', (error, stdout, stderr) => {
     if (error) {
       return;
     }
   });
   });
 
-}, 100000);
+}, 30000);
   playingSound=true;
 }
 
@@ -218,7 +203,7 @@ function checkIfAlarm(settings, doorOpened) {
 
             settings.alarms.forEach(function(alarm) {
                 if (lastAlarm.timestamp.min == alarm.timestamp.min & lastAlarm.timestamp.hour == alarm.timestamp.hour) {
-emitQueue.push({emitString:"externalRemoveAlarm",emitData:alarm});
+                  io.emit("externalRemoveAlarm",alarm);
                 } else {
                     tempAlarms.push(alarm);
                 }
@@ -253,13 +238,13 @@ function enableDisableAlarm(enableOrDisable) {
 
         });
         MakeAlarmSound(true);
-        emitQueue.push({emitString:"alarm",emitData:true});
+        io.emit("alarm",true);
     } else {
         port.write("2", function(err, results) {
 
         });
         MakeAlarmSound(false);
-        emitQueue.push({emitString:"alarm",emitData:false});
+        io.emit("alarm",false);
     }
 }
 app.use(express.static('public'));
