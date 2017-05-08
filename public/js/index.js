@@ -1,4 +1,4 @@
-var socket = io.connect('http://78.22.152.68/');
+var socket = io.connect('http://localhost/');
 socket.on('connected', function(data) {
     socket.emit("init");
 

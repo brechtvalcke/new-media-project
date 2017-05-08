@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"alarms":[],"alarmActive":true,"lightOn":true,"lightActivate":false,"lightDeactivate":true}
-=======
-{"enabled":true,"alarms":[{"timestamp":{"hour":"12","min":"00"}}],"alarmActive":false}
->>>>>>> parent of 979c274... data file removed from code
+{"alarms":[],"alarmActive":true}
