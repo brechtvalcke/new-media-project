@@ -1,1 +1,1 @@
-{"alarms":[{"timestamp":{"hour":"8","min":"00"}}],"alarmActive":false,"switchLight":false}
+{"alarms":[{"timestamp":{"hour":"8","min":"00"}},{"timestamp":{"hour":"10","min":"00"}},{"timestamp":{"hour":"16","min":"25"}}],"alarmActive":false,"switchLight":false}
